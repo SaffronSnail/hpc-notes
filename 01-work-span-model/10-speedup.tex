@@ -1,0 +1,32 @@
+\documentclass{standalone}
+
+\title{Speedup}
+\date{2017-07-09}
+\author{Bryan Ferris}
+
+\usepackage{amsmath}
+
+\begin{document}
+
+\ifstandalone
+\maketitle
+\fi
+
+\section{Speedup}
+
+\subsection{Definitions}
+\begin{align*}
+	Sp &= \text{Speedup}\\
+	T_l &= \text{Best linear time}\\
+	T_p &= \text{Time of a specific parallel algorithm}\\
+	Sp &= \frac{T_l}{T_p}
+\end{align*}
+
+Speedup is how many times faster $T_p$ is than $T_l$:
+\begin{align*}
+	Sp \times T_p = \frac{T_l \times T_p}{T_p}\\
+	Sp \times T_p = T_l
+\end{align*}
+
+\end{document}
+

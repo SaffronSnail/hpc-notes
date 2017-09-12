@@ -1,0 +1,44 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage[subpreambles=true]{standalone}
+
+\title{The Work-Span Model}
+\date{2017-08-09}
+\author{Bryan Ferris}
+
+\begin{document}
+\ifstandalone
+\maketitle
+\pagenumbering{gobble}
+\fi
+
+\section{Work and Span}
+Work, $W(n)$, refers to the number of nodes in the DAG, while Span, $D(n)$, refers to the longest path length from the beginning to the end of the DAG.
+
+\subsection{Work and Span Laws}
+\subsubsection{Average Available Parallelism}
+\[\frac{W(n)}{D(n)}\]
+The idea here is that we are figuring out how much work is available \textit{per critical path node}. If the dependencies in the DAG are spread out relatively evenly amongst critical path nodes then this figure is very useful: it tells us how many processors we can keep busy per critical path node. However, the critical path may not always have dependencies distributed evenly, meaning that more or less processors could be more efficient overall.
+
+\subsubsection{Span Law}
+\[T_p(n) \geq D(n)\]
+
+\subsubsection{Work Law}
+\[T_p(n) \geq \lceil \frac{W(n)}{P} \rceil\]
+
+\subsubsection{Brent's Theorem}
+Brent's Theorem is derived as follows:
+
+\begin{enumerate}
+	\item \textbf{Divide the DAG into D phases}. Nodes may only depend on nodes from previous phases (NOT the same phase). Each phase should contain exactly one critical path node. A phase is identified by the number of the critical path node (where the number is their natural numbering from start to end).
+	\item \begin{align*}
+		T_p &= \sum_{k=1}^D \lceil\frac{W_k}{P}\rceil\\
+		T_p &= \sum_{k=1}^D \lfloor\frac{W_k - 1}{P}\rfloor + 1\\
+		T_p &\leq \sum_{k=1}^D \lceail\frac{W_k - 1}{P}\\
+		T_p &\leq \frac{W - D}{P} + D
+  \end{align*}
+\end{enumerate}
+
+\end{document}
+
