@@ -5,27 +5,39 @@
 \author{Bryan Ferris}
 
 \usepackage{amsmath}
+\usepackage[subpreambles=true]{standalone}
 
 \begin{document}
 
-\ifstandalone
-\maketitle
-\fi
+% \ifstandalone
+% \maketitle
+% \fi
 
 \section{Speedup}
 
 \subsection{Definitions}
 \begin{align*}
 	Sp &= \text{Speedup}\\
-	T_l &= \text{Best linear time}\\
+	T_1 &= \text{Best linear time}\\
 	T_p &= \text{Time of a specific parallel algorithm}\\
-	Sp &= \frac{T_l}{T_p}
+	Sp &= \frac{T_1}{T_p}
 \end{align*}
 
-Speedup is how many times faster $T_p$ is than $T_l$:
+Speedup is how many times faster $T_p$ is than $T_1$:
 \begin{align*}
-	Sp \times T_p = \frac{T_l \times T_p}{T_p}\\
-	Sp \times T_p = T_l
+	Sp \times T_p = \frac{T_1 \times T_p}{T_p}\\
+	Sp \times T_p = T_1
+\end{align*}
+
+\subsection{Ideal Speedup}
+Ideal speedup is achieved when $T_p$ is $P$ times faster than $T_1$. That is, the algorithm scales linearly with $P$.
+
+\subsubsection{Achieving Ideal Speedup}
+Consider the following:
+\begin{align*}
+  Sp(n) &= \frac{T_1}{T_p}\\
+  Sp(n) &= \frac{W}{T_p} \geq \frac{W}{\frac{W_p - D}{P} + D}\\
+  Sp(n) &= \frac{W}{T_p} \geq \frac{P}{\frac{W_p}{W} + \frac{P - 1}{\frac{W}{D}}}
 \end{align*}
 
 \end{document}

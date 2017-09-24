@@ -1,16 +1,32 @@
 \documentclass{article}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
 \usepackage[subpreambles=true]{standalone}
 
-\title{
-	High-Performance Computing Notes\\
-	\large based on Georgia Tech's course, accessed from Udacity
+% Header and Footer Settings
+\pagestyle{fancy}
+\lfoot{\text{Page }\thepage\text{ of }\pageref{LastPage}}
+\cfoot{}
+
+\AtBeginDocument{
+  \title{
+  	High-Performance Computing Notes\\
+  	\large based on Georgia Tech's course, accessed from Udacity
+  }
+
+  \date{September 2017 - Present}
+  \author{Bryan Ferris}
 }
 
-\date{September 2017 - Present}
-\author{Bryan Ferris}
-
 \begin{document}
+\setlength{\parindent}{0cm}
 \maketitle
-\include{test}
+\pagenumbering{gobble}
+
+\newpage
+\pagenumbering{arabic}
+\include{01-work-span-model/01-introduction}
+\include{01-work-span-model/10-speedup}
+
 \end{document}
 

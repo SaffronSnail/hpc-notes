@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{standalone}
 
 \usepackage{amsmath}
 \usepackage[subpreambles=true]{standalone}
@@ -7,25 +7,37 @@
 \date{2017-08-09}
 \author{Bryan Ferris}
 
+\input{../pseudocode}
+
 \begin{document}
 \ifstandalone
 \maketitle
 \pagenumbering{gobble}
+
+\newpage
+\pagenumbering{arabic}
 \fi
 
+\section{Spawn and Sync}
+To spawn a function is to run it in a new thread. To sync is to wait for certain threads to finish executing before continuing (which threads you are waiting for should be clear from the context of the sync).
+
 \section{Work and Span}
-Work, $W(n)$, refers to the number of nodes in the DAG, while Span, $D(n)$, refers to the longest path length from the beginning to the end of the DAG.
+Work, $W$, refers to the number of nodes in the DAG, while Span, $D$, refers to the longest path length from the beginning to the end of the DAG.\\
+
+In most situations, ideal $W$ will be $O(n)$. While it can be common to have even better performance in specific sitations (such as searching algorithms in sorted data structures), most of the time when you do work there is an operation that you need to perform on each element. In these cases, better than $O(n)$ time is unrealistic.\\
+
+Ideal $D$, however, is normally $O(log^k(n))$ ($polylogrithmic$).
 
 \subsection{Work and Span Laws}
 \subsubsection{Average Available Parallelism}
-\[\frac{W(n)}{D(n)}\]
+\[\frac{W}{D}\]
 The idea here is that we are figuring out how much work is available \textit{per critical path node}. If the dependencies in the DAG are spread out relatively evenly amongst critical path nodes then this figure is very useful: it tells us how many processors we can keep busy per critical path node. However, the critical path may not always have dependencies distributed evenly, meaning that more or less processors could be more efficient overall.
 
 \subsubsection{Span Law}
-\[T_p(n) \geq D(n)\]
+\[T_p \geq D\]
 
 \subsubsection{Work Law}
-\[T_p(n) \geq \lceil \frac{W(n)}{P} \rceil\]
+\[T_p \geq \lceil \frac{W}{P} \rceil\]
 
 \subsubsection{Brent's Theorem}
 Brent's Theorem is derived as follows:
@@ -35,10 +47,14 @@ Brent's Theorem is derived as follows:
 	\item \begin{align*}
 		T_p &= \sum_{k=1}^D \lceil\frac{W_k}{P}\rceil\\
 		T_p &= \sum_{k=1}^D \lfloor\frac{W_k - 1}{P}\rfloor + 1\\
-		T_p &\leq \sum_{k=1}^D \lceail\frac{W_k - 1}{P}\\
+		T_p &\leq \sum_{k=1}^D \frac{W_k - 1}{P} + 1\\
 		T_p &\leq \frac{W - D}{P} + D
   \end{align*}
+	\item This is some bullshit just to make this section run onto the next page. Thank you very much for reading my bullshit! =)
 \end{enumerate}
+
+\subsection{Parallel For}
+Parallel for, or parfor, is shorthand for writing a loop where each iteration of the loop may be performed in parallel. That is, given the following code:
 
 \end{document}
 
