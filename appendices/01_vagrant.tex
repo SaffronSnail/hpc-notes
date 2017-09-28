@@ -1,0 +1,19 @@
+\usepackage{csquotes}
+
+\begin{document}
+
+\section{Overview}
+HashiCorp, the company that owns Vagrant, describes it as \enquote{a tool for
+building and managing virtual machine environments in a single workflow}. It
+cooperates with traditional virtualization and configuration management
+software in order to complete this taks. For example, a particular Vagrant
+user may be using VirtualBox as their virtualization software and Chef as
+their configuration software. They can then pass the Vagrantfile for a
+project off to their coworker, who uses VMware and Puppet. Vagrant will use
+these tools to set up the exact same development environment as the first
+user got. If this file is then deployed on AWS, it will will create the same
+environment again, ensuring that everyone gets the same results every time,
+regardless of the underlying software used.
+
+\end{document}
+

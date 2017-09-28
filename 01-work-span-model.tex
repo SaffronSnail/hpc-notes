@@ -1,0 +1,139 @@
+\documentclass{standalone}
+
+\input{pseudocode}
+
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage[subpreambles=true]{standalone}
+
+\title{The Work-Span Model}
+\date{2017/08/09}
+\author{Bryan Ferris}
+
+\begin{document}
+\ifstandalone
+\maketitle
+\pagenumbering{gobble}
+
+\newpage
+\pagenumbering{arabic}
+\fi
+
+\section{Spawn and Sync}
+To spawn a function is to run it in a new thread. To sync is to wait for certain
+threads to finish executing before continuing (which threads you are waiting for
+should be clear from the context of the sync).
+
+\section{Work and Span}
+Work, $W$, refers to the number of nodes in the DAG, while Span, $D$, refers to
+the longest path length from the beginning to the end of the DAG.\\
+
+In most situations, ideal $W$ will be $O(n)$. While it can be common to have
+even better performance in specific sitations (such as searching algorithms in
+sorted data structures), most of the time when you do work there is an operation
+that you need to perform on each element. In these cases, better than $O(n)$
+time is unrealistic.\\
+
+Ideal $D$, however, is normally $O(log^k(n))$ ($polylogrithmic$).
+
+\subsection{Speedup}
+
+\subsubsection{Definitions}
+\begin{align*}
+	Sp &= \text{Speedup}\\
+	T_1 &= \text{Best linear time}\\
+	T_p &= \text{Time of a parallel algorithm using p processors}\\
+	Sp &= \frac{T_1}{T_p}
+\end{align*}
+
+Speedup is how many times faster $T_p$ is than $T_1$:
+\begin{align*}
+	Sp \times T_p = \frac{T_1 \times T_p}{T_p}\\
+	Sp \times T_p = T_1
+\end{align*}
+
+\subsubsection{Ideal Speedup}
+Ideal speedup is achieved when $T_p$ is $P$ times faster than $T_1$. That is, the algorithm scales linearly with $P$.
+
+\subsubsection{Achieving Ideal Speedup}
+Consider the following:
+\begin{align*}
+  Sp(n) &= \frac{T_1}{T_p}\\
+  Sp(n) &= \frac{W}{T_p} \geq \frac{W}{\frac{W_p - D}{P} + D}\\
+  Sp(n) &= \frac{W}{T_p} \geq \frac{P}{\frac{W_p}{W} + \frac{P - 1}{\frac{W}{D}}}
+\end{align*}
+
+\subsection{Work and Span Laws}
+\subsubsection{Average Available Parallelism}
+This tells us how much work is available per critical path node, on average. We
+use this to determine k
+\[\frac{W}{D}\]
+The idea here is that we are figuring out how much work is available
+\textit{per critical path node}. If the dependencies in the DAG are spread out
+relatively evenly amongst critical path nodes then this figure is very useful:
+it tells us how many processors we can keep busy per critical path node.
+However, the critical path may not always have dependencies distributed evenly,
+meaning that more or less processors could be more efficient overall.
+
+\subsubsection{Span Law}
+\[T_p \geq D\]
+
+\subsubsection{Work Law}
+\[T_p \geq \lceil \frac{W}{P} \rceil\]
+
+\subsubsection{Brent's Theorem}
+Brent's Theorem is derived as follows:
+
+\begin{enumerate}
+  \item \textbf{Divide the DAG into D phases}. Nodes may only depend on nodes
+    from previous phases (NOT the same phase). Each phase should contain exactly
+    one critical path node. A phase is identified by the number of the critical
+    path node (where the number is their natural numbering from start to end).
+  \item \begin{align*}
+    T_p &= \sum_{k=1}^D \lceil\frac{W_k}{P}\rceil\\
+    T_p &= \sum_{k=1}^D \lfloor\frac{W_k - 1}{P}\rfloor + 1\\
+    T_p &\leq \sum_{k=1}^D \frac{W_k - 1}{P} + 1\\
+    T_p &\leq \frac{W - D}{P} + D
+  \end{align*}
+\end{enumerate}
+
+\subsection{Parallel For}
+Parallel for, or parfor, is shorthand for writing a loop where each iteration of
+the loop may be performed in parallel. That is, the following two code segments
+are identical:
+
+\begin{lstlisting}
+  parfor i in 1 to n do
+    foo(i)
+\end{lstlisting}
+
+\begin{lstlisting}
+  fn ParForT(foo, a, b)
+    let n = b - a + 1
+    if n = 1 then foo(a)
+    else
+      let m = a + floor(n/2)
+      spawn ParForT(foo, a, m - 1)
+      ParForT(foo, m, b)
+      sync
+  ParForT(foo, 1, n)
+\end{lstlisting}
+
+Note the recursive implementation of ParForT.
+While it would be simpler to write:
+
+\begin{lstlisting}
+  fn ParForT(foo, a, b)
+  for i in a to b do
+    spawn foo(i)
+  sync()
+\end{lstlisting}
+
+This is suboptimal. Since the spawns are executed linarly, the minimum size of
+the critical path is $b - a$. Writing parfor as a recursive function allows the
+spawns to happen in parallel, rather than only the foo function happening in
+parallel, bringing the minimum critical path size down to $log(n)$. This is
+particularly important when performing fast operations on large data sets.
+
+\end{document}
+
