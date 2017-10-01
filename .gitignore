@@ -1,6 +1,7 @@
 *.aux
 *.dvi
 *.log
+*.out
 *.pdf
 *.sta
 
