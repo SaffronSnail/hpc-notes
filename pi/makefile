@@ -1,6 +1,9 @@
-.PHONY: run-parallel run-serial
+.PHONY: run-parallel run-serial both
+
+both: parallel.out serial.out
 
 run-parallel: parallel.out
+run-serial: serial.out
 
 parallel.out: parallel.c
 	gcc -fopenmp $^ -o $@
