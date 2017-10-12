@@ -5,3 +5,6 @@
 *.pdf
 *.sta
 
+# this is from the professor, I don't have permission to redistribute
+mpi_heat2D.c
+
