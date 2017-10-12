@@ -1,16 +1,15 @@
-.PHONY: run-parallel run-serial both
+FLAGS=-std=c++11 -Wall -Wextra -Werror
 
-both: parallel.out serial.out
+main.out: main.cpp serial.o timer.o parallel.o
+	mkdir ${PREFIX}/bin
+	g++ $^ ${FLAGS} -fopenmp -o ${PREFIX}/bin/$@
 
-run-parallel: parallel.out
-run-serial: serial.out
+timer.o: timer.h timer.cpp
+	g++ ${FLAGS} -c timer.cpp -o $@
 
-parallel.out: parallel.c
-	gcc -fopenmp $^ -o $@
+parallel.o: parallel.cpp parallel.h
+	g++ ${FLAGS} -fopenmp -c parallel.cpp -o $@
 
-run-serial: serial.out
-	./serial.out
-
-serial.out: serial.c
-	gcc $^ -o $@
+serial.o: serial.cpp serial.cpp
+	g++ ${FLAGS} -c serial.cpp -o $@
 

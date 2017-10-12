@@ -1,0 +1,4 @@
+namespace parallel {
+  double pi();
+}
+

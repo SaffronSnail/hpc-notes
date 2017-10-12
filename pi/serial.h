@@ -1,0 +1,4 @@
+namespace serial {
+  double pi();
+}
+

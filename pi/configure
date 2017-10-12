@@ -1,7 +1,0 @@
-#! /bin/bash
-
-PREFIX=$1/bin
-mkdir -p $PREFIX
-mv makefile{,.orig}
-sed s#\$@#$PREFIX/\$@# < makefile.orig > makefile
-
