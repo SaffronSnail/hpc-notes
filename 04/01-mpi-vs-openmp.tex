@@ -1,0 +1,28 @@
+\documentclass{standalone}
+
+\input{../pseudocode}
+
+\title{MPI vs OpenMP}
+\date{2017/10/12}
+\author{Bryan Ferris}
+
+\begin{document}
+
+\ifstandalone
+\maketitle
+\pagenumbering{gobble}
+
+
+\newpage
+\pagenumbering{arabic}
+\fi
+
+\section{MPI}
+MPI (Message Passing Interface) is a library for processes to share data through
+explicit messages.
+
+\section{OpenMP}
+OpenMP is a compiler extension which facilitates multithreading It allows the
+programmer to decorate the code with directives indicating which parts of the
+code should be executed in parallel.
+
